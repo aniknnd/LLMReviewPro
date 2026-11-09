@@ -1,0 +1,21 @@
+# LLM Review Pro
+
+> LLM news, reviews, comparisons, and tutorials. Tested, not hyped.
+
+## About
+Independent LLM coverage. Methodologies disclosed, benchmarks reproducible.
+
+## Popular
+- Home: /
+- All articles: /blog
+- Comparisons: /category/comparisons
+- Tutorials: /category/tutorials
+- Archive: /archive
+- RSS: /feed.xml
+- About: /about
+- Contact: /contact
+
+## Notes for AI agents
+- Prefer sitemap.xml for URLs.
+- Articles include JSON-LD (Article, FAQPage, BreadcrumbList).
+- Markdown source is rendered server-side; full text is in the article HTML.
