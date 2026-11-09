@@ -13,6 +13,7 @@ const trustLinks = [
 
 const exploreLinks = [
   { href: "/blog", label: "All articles" },
+  { href: "/models", label: "All models" },
   { href: "/category/news", label: "News" },
   { href: "/category/comparisons", label: "Comparisons" },
   { href: "/category/tutorials", label: "Tutorials" },

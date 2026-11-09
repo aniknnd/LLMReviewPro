@@ -49,6 +49,9 @@ export default async function Header() {
           <Link href="/blog" className="rounded-md px-3 py-2 text-sm font-medium hover:bg-[var(--border)]/40">
             Articles
           </Link>
+          <Link href="/models" className="rounded-md px-3 py-2 text-sm font-medium hover:bg-[var(--border)]/40">
+            Models
+          </Link>
           <Link href="/category/comparisons" className="rounded-md px-3 py-2 text-sm font-medium hover:bg-[var(--border)]/40">
             Comparisons
           </Link>
@@ -122,6 +125,7 @@ export default async function Header() {
       <nav aria-label="Primary (mobile)" className="border-t border-[var(--border)] md:hidden">
         <div className="mx-auto flex max-w-6xl items-center gap-1 overflow-x-auto px-4 py-2 sm:px-6">
           <Link href="/blog" className="shrink-0 rounded-md px-3 py-2 text-sm font-medium">Articles</Link>
+          <Link href="/models" className="shrink-0 rounded-md px-3 py-2 text-sm font-medium">Models</Link>
           <Link href="/category/comparisons" className="shrink-0 rounded-md px-3 py-2 text-sm font-medium">Comparisons</Link>
           <details className="group shrink-0">
             <summary className="cursor-pointer list-none rounded-md px-3 py-2 text-sm font-medium">Tutorials ▾</summary>
