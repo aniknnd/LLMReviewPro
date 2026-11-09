@@ -18,6 +18,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: q ? `Search: “${q}”` : "Search",
     description: q ? `Search results for “${q}” on LLM Review Pro.` : "Search LLM articles.",
     path: q ? `/search?q=${encodeURIComponent(q)}` : "/search",
+    keywords: q ? [`search ${q}`, `LLM search`, `${q} LLM`] : ["search LLM articles", "LLM search"],
     noindex: true, // Search pages are noindex (thin/duplicate risk).
   });
 }

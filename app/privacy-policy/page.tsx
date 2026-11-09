@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: page?.metaTitle || "Privacy Policy",
     description: page?.metaDescription || "How LLM Review Pro collects, uses, and protects personal data.",
     path: "/privacy-policy",
+    keywords: ["privacy policy", "LLM Review Pro privacy"],
   });
 }
 

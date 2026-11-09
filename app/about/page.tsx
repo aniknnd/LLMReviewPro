@@ -14,6 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: page?.metaTitle || "About",
     description: page?.metaDescription || `About ${site.name}: editorial process, team, and standards.`,
     path: "/about",
+    keywords: ["about LLM Review Pro", "LLM editorial team", "AI blog about"],
   });
 }
 

@@ -13,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: `${site.name} — ${site.tagline}`,
     description: site.description,
     path: "/",
+    keywords: ["LLM", "Large Language Models", "GPT-5", "Claude", "Gemini", "AI reviews", "AI benchmarks", "LLM tutorials", "AI video"],
   });
 }
 

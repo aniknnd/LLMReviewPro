@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -89,7 +88,6 @@ const themeInitScript = `(function(){try{var t=localStorage.getItem("llmreviewpr
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const website = websiteJsonLd();
   const org = organizationJsonLd();
-  const gaId = site.gaId;
 
   return (
     <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
@@ -99,22 +97,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {site.adsenseVerification && (
           <meta name="google-site-verification" content={site.adsenseVerification} />
         )}
-        {/* Google Analytics 4 (gtag.js) — loads afterInteractive, no render block. */}
-        {gaId && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script
-              id="gtag-config"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`,
-              }}
-            />
-          </>
-        )}
+        {/* GA4 (gtag.js) is loaded after consent by CookieConsent — not in head,
+            so PageSpeed / first paint ships zero analytics JS. */}
       </head>
       <body className="flex min-h-screen flex-col">
         {/* Global JSON-LD: WebSite (+SearchAction) + Organization */}

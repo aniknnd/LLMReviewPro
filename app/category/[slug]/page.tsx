@@ -36,6 +36,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       category.description ||
       `${category.name} articles on ${site.name}.`,
     path: page > 1 ? `/category/${slug}?page=${page}` : `/category/${slug}`,
+    keywords: [`${category.name} articles`, `${category.name} LLM`, `${category.name} reviews`, `${category.name} tutorials`],
     noindex,
   });
 }

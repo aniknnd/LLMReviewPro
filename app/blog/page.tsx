@@ -22,6 +22,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: `All articles${suffix}`,
     description: `Every LLM article on ${site.name}: news, comparisons, reviews, and tutorials.`,
     path: p && p > 1 ? `/blog?page=${p}` : "/blog",
+    keywords: ["LLM blog", "LLM articles", "AI news", "LLM reviews", "LLM tutorials"],
   });
 }
 

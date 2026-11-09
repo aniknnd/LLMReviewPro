@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: page?.metaTitle || "Disclaimer",
     description: page?.metaDescription || "Affiliate, trademark, and accuracy disclaimer for LLM Review Pro.",
     path: "/disclaimer",
+    keywords: ["disclaimer", "affiliate disclaimer", "LLM Review Pro"],
   });
 }
 

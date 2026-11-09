@@ -13,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Archive",
     description: `Browse every ${site.name} article by month.`,
     path: "/archive",
+    keywords: ["LLM archive", "AI article archive", "blog archive"],
   });
 }
 

@@ -20,6 +20,8 @@ import AdSlot from "@/components/AdSlot";
 import ViewTracker from "@/components/ViewTracker";
 import { formatDate, readingTimeLabel, truncate } from "@/lib/utils";
 import { site } from "@/lib/site";
+// Syntax theme only on post pages (keeps home/listing CSS smaller).
+import "highlight.js/styles/github-dark.css";
 
 export const revalidate = 86400; // ISR: 1 day; admin updates call revalidatePath.
 export const dynamicParams = true; // New posts generate on-demand.

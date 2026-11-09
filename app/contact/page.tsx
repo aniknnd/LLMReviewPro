@@ -13,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Contact",
     description: `Contact ${site.name} for corrections, press, and feedback.`,
     path: "/contact",
+    keywords: ["contact LLM Review Pro", "contact AI blog", "LLM corrections"],
   });
 }
 

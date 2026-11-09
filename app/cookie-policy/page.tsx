@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: page?.metaTitle || "Cookie Policy",
     description: page?.metaDescription || "Cookies and consent on LLM Review Pro, including AdSense.",
     path: "/cookie-policy",
+    keywords: ["cookie policy", "LLM Review Pro cookies"],
   });
 }
 

@@ -6,19 +6,22 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 
 /**
- * Consent banner + AdSense loader.
+ * Consent banner + AdSense + GA4 loader.
  *
- * - Ads script loads ONLY after consent (`llmreviewpro_consent==='accepted'`).
+ * - AdSense AND GA4 load ONLY after consent
+ *   (`llmreviewpro_consent==='accepted'`). First paint / PageSpeed lab
+ *   (no consent stored) ships zero analytics/ad JS — directly improves
+ *   "Reduce unused JavaScript" and long-task scores.
  * - If NEXT_PUBLIC_GOOGLE_CMP_URL is set, a Google-certified CMP script is
  *   loaded instead of the built-in banner (required pattern for EEA/UK/CH).
- * - Banner is non-blocking (bottom bar, dismissible), never covers article text.
- * - Stores first-party consent flag (localStorage + cookie) with description.
+ * - Banner is non-blocking (bottom bar, dismissible).
  */
 export default function CookieConsent() {
   const [show, setShow] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const cmpUrl = site.googleCmpEnabled;
   const pubId = site.adsensePublisherId;
+  const gaId = site.gaId;
 
   useEffect(() => {
     let stored: string | null = null;
@@ -41,9 +44,19 @@ export default function CookieConsent() {
   }, [cmpUrl]);
 
   function loadAds() {
-    if (loaded || !pubId || !site.adsEnabled) return;
+    if (loaded) return;
+    // GA4 (gtag.js) — idempotent.
+    if (gaId && !document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
+      const s = document.createElement("script");
+      s.async = true;
+      s.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+      document.head.appendChild(s);
+      const init = document.createElement("script");
+      init.textContent = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`;
+      document.head.appendChild(init);
+    }
     // AdSense loader (idempotent).
-    if (!document.querySelector('script[src*="adsbygoogle"]')) {
+    if (pubId && site.adsEnabled && !document.querySelector('script[src*="adsbygoogle"]')) {
       const s = document.createElement("script");
       s.async = true;
       s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${pubId}`;
@@ -80,8 +93,7 @@ export default function CookieConsent() {
   }
 
   if (!show) {
-    // Still ensure ads load when consent already accepted from a prior session.
-    return <ConsentPreload pubId={pubId} />;
+    return <ConsentPreload pubId={pubId} gaId={gaId} />;
   }
 
   return (
@@ -121,15 +133,24 @@ export default function CookieConsent() {
   );
 }
 
-/** Loads AdSense when consent already exists (SPA navigation after accept). */
-function ConsentPreload({ pubId }: { pubId: string }) {
+/** Loads GA4 + AdSense when consent already exists. */
+function ConsentPreload({ pubId, gaId }: { pubId: string; gaId: string }) {
   useEffect(() => {
-    if (!pubId || !site.adsEnabled) return;
     let c: string | null = null;
     try {
       c = localStorage.getItem("llmreviewpro_consent");
     } catch { /* ignore */ }
     if (c !== "accepted") return;
+    if (gaId && !document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
+      const s = document.createElement("script");
+      s.async = true;
+      s.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+      document.head.appendChild(s);
+      const init = document.createElement("script");
+      init.textContent = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`;
+      document.head.appendChild(init);
+    }
+    if (!pubId || !site.adsEnabled) return;
     if (!document.querySelector('script[src*="adsbygoogle"]')) {
       const s = document.createElement("script");
       s.async = true;
@@ -137,6 +158,6 @@ function ConsentPreload({ pubId }: { pubId: string }) {
       s.crossOrigin = "anonymous";
       document.head.appendChild(s);
     }
-  }, [pubId]);
+  }, [pubId, gaId]);
   return null;
 }

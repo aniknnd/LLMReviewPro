@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${author.name} — Articles & Bio`,
     description: author.bio || `Articles by ${author.name} on ${site.name}.`,
     path: `/author/${slug}`,
+    keywords: [`${author.name} LLM`, `${author.name} articles`, `${author.name} bio`, `${author.title} LLM`],
   });
 }
 

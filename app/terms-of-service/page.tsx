@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: page?.metaTitle || "Terms of Service",
     description: page?.metaDescription || "Terms of use for LLM Review Pro.",
     path: "/terms-of-service",
+    keywords: ["terms of service", "LLM Review Pro terms"],
   });
 }
 

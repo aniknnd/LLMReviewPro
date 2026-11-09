@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: page?.metaTitle || "Editorial & Content Policy",
     description: page?.metaDescription || "How LLM Review Pro writes, reviews, and corrects content.",
     path: "/editorial-policy",
+    keywords: ["editorial policy", "AI content policy", "LLM Review Pro"],
   });
 }
 
