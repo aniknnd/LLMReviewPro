@@ -3,16 +3,16 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 import { buildMetadata, breadcrumbJsonLd, escapeJsonLd } from "@/lib/seo";
 import { MODELS } from "@/lib/models-data";
+import { getAllPublishedSlugs } from "@/lib/queries";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const revalidate = 86400;
 
 /**
  * Models index — every real model we curate, oldest → newest,
- * grouped by provider/company. No invented entries: only models with
- * verifiable public existence ({MODELS.length} total).
- * Links point to /blog/<slug> reviews (116 have reviews; historical
- * foundations link to closest review or are listed for reference).
+ * grouped by provider/company. No invented entries.
+ * Links point to /blog/<slug> only where a published review exists;
+ * new/ historical entries show "No review yet" instead of 404 links.
  */
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
@@ -23,7 +23,26 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function ModelsPage() {
+export default async function ModelsPage() {
+  const slugs = await getAllPublishedSlugs().catch(() => []);
+  const reviewed = new Set(slugs.map((s) => s.slug));
+
+  // Flagship reviews use longer slugs — map catalog → published slug.
+  const ALIAS: Record<string, string> = {
+    "gpt-6-1-sol-review": "gpt-6-1-sol-review-openai-frontier",
+    "claude-opus-5-5-review": "claude-opus-5-5-review-agentic-coding",
+    "gemini-3-1-pro-review": "gemini-3-1-pro-3-8-flash-review",
+    "gemini-3-8-flash-review": "gemini-3-1-pro-3-8-flash-review",
+    "llama-4-maverick-review": "llama-4-deepseek-open-weight-review",
+    "llama-4-scout-review": "llama-4-deepseek-open-weight-review",
+    "deepseek-r1-review": "llama-4-deepseek-open-weight-review",
+    "veo-3-1-review": "google-veo-3-1-review-video-audio",
+    "kling-3-review": "kling-3-0-review-realistic-humans",
+    "runway-gen-4-5-review": "runway-gen-4-5-review-director-control",
+  };
+  const reviewSlug = (slug: string) => ALIAS[slug] || slug;
+  const hasReview = (slug: string) => reviewed.has(reviewSlug(slug));
+
   // Oldest → newest (YYYY-MM), then name
   const sorted = [...MODELS].sort((a, b) =>
     a.release.localeCompare(b.release) || a.name.localeCompare(b.name),
@@ -100,9 +119,13 @@ export default function ModelsPage() {
                   <td className="px-4 py-3">{m.params}</td>
                   <td className="px-4 py-3">{m.license}</td>
                   <td className="px-4 py-3 text-right">
-                    <Link href={`/blog/${m.slug}`} className="text-[var(--accent)] hover:underline">
-                      Read →
-                    </Link>
+                    {hasReview(m.slug) ? (
+                      <Link href={`/blog/${reviewSlug(m.slug)}`} className="text-[var(--accent)] hover:underline">
+                        Read →
+                      </Link>
+                    ) : (
+                      <span className="text-xs text-[var(--muted)]">No review yet</span>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -121,9 +144,13 @@ export default function ModelsPage() {
             {list.map((m) => (
               <li key={m.slug} className="flex flex-wrap items-baseline justify-between gap-2 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] px-4 py-3">
                 <span>
-                  <Link href={`/blog/${m.slug}`} className="font-semibold hover:text-[var(--accent)]">
-                    {m.name}
-                  </Link>{" "}
+                  {hasReview(m.slug) ? (
+                    <Link href={`/blog/${reviewSlug(m.slug)}`} className="font-semibold hover:text-[var(--accent)]">
+                      {m.name}
+                    </Link>
+                  ) : (
+                    <span className="font-semibold">{m.name}</span>
+                  )}{" "}
                   <span className="text-sm text-[var(--muted)]">
                     {m.family} · {m.release} · {m.context} · {m.license}
                   </span>
