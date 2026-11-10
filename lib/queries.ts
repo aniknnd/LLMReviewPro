@@ -230,7 +230,7 @@ export async function getPostsByAuthor(
 }
 
 export async function getAllPublishedSlugs(): Promise<
-  Array<{ slug: string; updatedAt: string; publishedAt: string | null }>
+  Array<{ slug: string; updatedAt: string; publishedAt: string | null; featuredImageUrl: string; featuredImageAlt: string }>
 > {
   const rows = await db
     .select({
@@ -238,6 +238,8 @@ export async function getAllPublishedSlugs(): Promise<
       updatedAt: posts.updatedAt,
       publishedAt: posts.publishedAt,
       status: posts.status,
+      featuredImageUrl: posts.featuredImageUrl,
+      featuredImageAlt: posts.featuredImageAlt,
     })
     .from(posts)
     .where(eq(posts.status, "published"));

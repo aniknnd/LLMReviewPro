@@ -35,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(p.updatedAt || p.publishedAt || new Date()),
     changeFrequency: "weekly",
     priority: 0.8,
+    images: p.featuredImageUrl ? [p.featuredImageUrl] : [],
   }));
 
   const catRoutes: MetadataRoute.Sitemap = categories.map((c) => ({

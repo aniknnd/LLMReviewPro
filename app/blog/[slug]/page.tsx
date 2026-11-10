@@ -56,8 +56,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     path: `/blog/${post.slug}`,
     canonical: canonical.startsWith("http") ? canonical : undefined,
-    // Per-post OG route when no custom image — file convention (1200×630 PNG).
-    image: post.ogImage || post.featuredImageUrl || `/blog/${post.slug}/opengraph-image`,
+    // Prefer the per-post OG route (PNG 1200×630); fall back to the featured cover.
+    image: post.ogImage || `/blog/${post.slug}/opengraph-image`,
     type: "article",
     publishedAt: post.publishedAt,
     updatedAt: post.updatedAt,
